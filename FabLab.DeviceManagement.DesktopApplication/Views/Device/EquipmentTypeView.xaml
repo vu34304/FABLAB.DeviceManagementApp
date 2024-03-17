@@ -1,0 +1,635 @@
+﻿<UserControl x:Class="FabLab.DeviceManagement.DesktopApplication.Views.Device.EquipmentTypeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FabLab.DeviceManagement.DesktopApplication.Views.Device"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+             xmlns:prism="http://prismlibrary.com/" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             xmlns:Components="clr-namespace:FabLab.DeviceManagement.DesktopApplication.Resources.Components" 
+             xmlns:vc="clr-namespace:FabLab.DeviceManagement.DesktopApplication.ValueConverters" 
+             xmlns:device="clr-namespace:FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels.Device;assembly=FabLab.DeviceManagement.DesktopApplication.Core" 
+             d:DataContext="{d:DesignInstance Type =device:EquipmentTypeViewModel}"
+             mc:Ignorable="d" 
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+             xmlns:xcctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             d:DesignHeight="770" d:DesignWidth="1190"
+             Background="{StaticResource ColorBackground}"
+             Padding="5">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <prism:InvokeCommandAction Command="{Binding LoadEquipmentTypeViewCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <materialDesign:DialogHost CloseOnClickAway="True" IsOpen="{Binding IsErrorMessageShowed}">
+        <materialDesign:DialogHost.DialogContent>
+            <Components:ErrorMessage Message="{Binding ErrorMessage}"/>
+        </materialDesign:DialogHost.DialogContent>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <materialDesign:Card 
+                Grid.Row="0"
+                Margin="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="337*"/>
+                        <ColumnDefinition Width="204*"/>
+                        <ColumnDefinition Width="39*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+
+
+                    <Grid Grid.Row="1" Grid.ColumnSpan="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <!--<RowDefinition Height="auto"/>-->
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="0.6*"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" 
+                               Margin="10,0,0,0" 
+                               Text="Mã loại:"
+                               Style="{StaticResource FieldLabel}"/>
+                        <ComboBox Grid.Row="0" Grid.Column="1"
+                              Margin="10"
+                              materialDesign:HintAssist.Hint="Mã loại"
+                              Style="{StaticResource ComboBox}"
+                              ItemsSource="{Binding EquipmentTypeIds, UpdateSourceTrigger=PropertyChanged}"
+                              Text="{Binding EquipmentTypeId}">
+                            <ComboBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </ComboBox.ItemsPanel>
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="0" Grid.Column="2" 
+                               Margin="10,0,0,0" 
+                               Text="Tên loại:"
+                               Style="{StaticResource FieldLabel}"/>
+                        <ComboBox Grid.Row="0" Grid.Column="3"
+                              Margin="10"
+                              materialDesign:HintAssist.Hint="Tên loại"
+                              Style="{StaticResource ComboBox}"
+                              ItemsSource="{Binding EquipmentTypeNames, UpdateSourceTrigger=PropertyChanged}"
+                              Text="{Binding EquipmentTypeName}">
+                            <ComboBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </ComboBox.ItemsPanel>
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="0" Grid.Column="4"
+                               Text="Lĩnh vực:"
+                               Style="{StaticResource FieldLabel}"
+                               Margin="10"
+                               VerticalAlignment="Center"/>
+                        <ComboBox Grid.Row="0" Grid.Column="5"
+                                      Margin="10"
+                                      materialDesign:HintAssist.Hint="Lĩnh vực"
+                                      Style="{StaticResource ComboBox}"
+                                      ItemsSource="{Binding Path=Category, Converter={vc:EnumToCollectionConverter}, Mode=OneTime}"
+                                      SelectedValuePath="Value"
+                                      DisplayMemberPath="Description"
+                                      Text="{Binding Path=Category}">
+                            <ComboBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </ComboBox.ItemsPanel>
+                        </ComboBox>
+
+                        <Button Grid.RowSpan="2" Grid.Column="6"
+                                 Margin="10"
+
+                            Style="{StaticResource ButtonPrimary}"
+                            materialDesign:ButtonAssist.CornerRadius="10"
+                            Content="Truy xuất">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <prism:InvokeCommandAction Command="{Binding LoadEquipmentTypeEntriesCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+
+                        <!--<TextBlock Grid.Row="1" Grid.Column="0"
+                                   Text="Tag:"
+                                   Style="{StaticResource FieldLabel}"
+                                   Margin="10"
+                                   VerticalAlignment="Center"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1"
+                                  Margin="10"
+                                  materialDesign:HintAssist.Hint="Tag"
+                                  Style="{StaticResource ComboBox}"
+                                  ItemsSource="{Binding Path=Category, Converter={vc:EnumToCollectionConverter}, Mode=OneTime}"
+                                  SelectedValuePath="Value"
+                                  DisplayMemberPath="Description"
+                                  Text="{Binding Path=Category}">
+                            <ComboBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </ComboBox.ItemsPanel>
+                        </ComboBox>-->
+                        <!--<TextBlock Grid.Row="1" Grid.Column="2"
+                                   Text="Mã thiết bị:"
+                                   Style="{StaticResource FieldLabel}"
+                                   Margin="10"
+                                   VerticalAlignment="Center"/>
+                        <ComboBox Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="3"
+                                  Margin="10"
+                                  materialDesign:HintAssist.Hint="Lĩnh vực"
+                                  Style="{StaticResource ComboBox}"
+                                  ItemsSource="{Binding Path=Category, Converter={vc:EnumToCollectionConverter}, Mode=OneTime}"
+                                  SelectedValuePath="Value"
+                                  DisplayMemberPath="Description"
+                                  Text="{Binding Path=Category}">
+                            <ComboBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </ComboBox.ItemsPanel>
+                        </ComboBox>-->
+                    </Grid>
+
+
+                </Grid>
+            </materialDesign:Card>
+            <materialDesign:Card Margin="10" Grid.Row="1">
+                <DataGrid   Grid.Row="2"
+                            IsReadOnly="True"
+                            AutoGenerateColumns="False"
+                            ItemsSource="{Binding EquipmentTypeEntries}"
+                            Background="{StaticResource ColorSurface}"
+                            MouseLeftButtonDown="DataGrid_MouseLeftButtonDown"
+                            VirtualizingPanel.ScrollUnit="Pixel"                         
+                            Grid.ColumnSpan="3" >
+                    <!--<DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                        <Grid Margin="0 30 0 0">
+                                            <ContentPresenter VerticalAlignment="Top"/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.CellStyle>-->
+                    <DataGrid.Columns >
+                        <DataGridTextColumn Header="Tên loại" Binding="{Binding EquipmentTypeName}" Width="*"/>
+                        <DataGridTextColumn Header="Mã loại" Binding="{Binding EquipmentTypeId}" Width="*"/>
+                        <DataGridTextColumn Header="Lĩnh vực" Binding="{Binding Category}" Width="*"/>
+                        <DataGridTextColumn Header="Mô tả" Binding="{Binding Description}" Width="*"/>
+                        <DataGridTemplateColumn Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Cập nhật"
+                            materialDesign:ButtonAssist.CornerRadius="10">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Click">
+                                                <prism:InvokeCommandAction Command="{Binding SaveCommand}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Xóa"
+                            materialDesign:ButtonAssist.CornerRadius="10">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Click">
+                                                <prism:InvokeCommandAction Command="{Binding DeleteCommand}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                       
+                    </DataGrid.Columns>
+
+                    <DataGrid.RowDetailsTemplate>
+                        <DataTemplate DataType="{x:Type device:EquipmentTypeEntryViewModel}">
+                            <Border BorderBrush="{StaticResource ColorSurfaceOn}"
+                        BorderThickness="1">
+                                <Grid Background="{StaticResource PrimaryHueMidBrush}" HorizontalAlignment="Stretch">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="1.5*"/>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="0.6*"/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Row="0" Grid.Column="0"
+                           Text="Mã loại:"
+                           Style="{StaticResource FieldLabel}"
+                           Margin="10"
+                           VerticalAlignment="Center"/>
+                                        <TextBox Grid.Row="0" Grid.Column="1"
+                           materialDesign:HintAssist.Hint="Mã loại"
+                           FontSize="16"
+                           IsEnabled="False"
+                           Style="{StaticResource TextBox}"
+                           Margin="10"
+                           VerticalAlignment="Center"
+                           Text="{Binding EquipmentTypeId}"/>
+
+                                        <TextBlock Grid.Row="0" Grid.Column="2"
+                           Text="Tên loại:"
+                           Style="{StaticResource FieldLabel}"
+                           Margin="10"
+                           VerticalAlignment="Center"/>
+                                        <TextBox Grid.Row="0" Grid.Column="3"
+                           materialDesign:HintAssist.Hint="Tên loại"
+                           FontSize="16"
+                           Style="{StaticResource TextBox}"
+                           Margin="10"
+                           VerticalAlignment="Center"
+                           Text="{Binding EquipmentTypeName, Mode=TwoWay, UpdateSourceTrigger =PropertyChanged}"/>
+
+                                        <TextBlock Grid.Row="0" Grid.Column="4"
+                           Text="Lĩnh vực:"
+                           Style="{StaticResource FieldLabel}"
+                           Margin="10"
+                           VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Row="0" Grid.Column="5"
+                          Margin="10"
+                          materialDesign:HintAssist.Hint="Lĩnh vực"
+                          Style="{StaticResource ComboBox}"
+                          ItemsSource="{Binding Path=Category, Converter={vc:EnumToCollectionConverter}, Mode=OneTime}"
+                          SelectedValuePath="Value"
+                          DisplayMemberPath="Description"
+                          Text="{Binding Path=Category, Mode=TwoWay, UpdateSourceTrigger =PropertyChanged}"/>
+
+                                    </Grid>
+
+                                    <Grid Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Row="1" Grid.Column="0"
+                           Text="Hình ảnh:"
+                           Style="{StaticResource FieldLabel}"
+                           Margin="10"
+                           VerticalAlignment="Center"/>
+                                        <TextBox Grid.Row="0" Grid.Column="1"
+                           materialDesign:HintAssist.Hint="Hình ảnh"
+                           FontSize="16"
+                           Style="{StaticResource TextBox}"
+                           Margin="10"
+                           VerticalAlignment="Center"
+                           Text="{Binding Picture, Mode=TwoWay, UpdateSourceTrigger = PropertyChanged}"/>
+                                    </Grid>
+
+                                    <Grid Grid.Row="2" Background="{StaticResource PrimaryHueMidBrush}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <DataGrid Margin="10" IsReadOnly="True" ItemsSource="{Binding SpecificationEquimentTypes}"></DataGrid>
+                                        <DataGrid Margin="10" IsReadOnly="True" 
+AutoGenerateColumns="False"  MaxHeight="200" Grid.Column="1"  Padding="10" 
+VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding Pictures}" >
+
+                                            <DataGrid.Columns >
+                                                <DataGridTemplateColumn Header="Image">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <Image Source="{Binding Source}" MaxHeight="200"/>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </DataGrid.RowDetailsTemplate>
+                </DataGrid>
+            </materialDesign:Card>
+            <!--Dang ki thiet bi-->
+            <materialDesign:Card 
+       Grid.Row="2"
+       Margin="10 10 10 0">
+                <Expander>
+                    <Expander.Header>
+                        <StackPanel Grid.Row="0">
+                            <TextBlock Text="Đăng kí loại thiết bị"
+                      Style="{StaticResource CardTitle}"/>
+                            <Separator/>
+                        </StackPanel>
+                    </Expander.Header>
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" 
+                                   Margin="10"
+                                   Text="Mã loại:"
+                                   Style="{StaticResource FieldLabel}"/>
+                        <TextBox Grid.Column="1"
+                                    materialDesign:HintAssist.Hint="Mã loại"
+                                    FontSize="16"
+                                    Style="{StaticResource TextBox}"
+                                    Margin="10"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding NewEquipmentTypeId}"/>
+
+                        <TextBlock Grid.Column="2"
+                                    Text="Tên loại:"
+                                   HorizontalAlignment="Left"
+                                    Style="{StaticResource FieldLabel}"
+                                    Margin="10" Grid.ColumnSpan="2" />
+                        <TextBox Grid.Column="3"
+                                    materialDesign:HintAssist.Hint="Tên loại"
+                                    FontSize="16"
+                                    Style="{StaticResource TextBox}"
+                                    Margin="10"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding NewEquipmentTypeName}"/>
+
+                        <TextBlock Grid.Column="2"
+                                   Grid.Row="1"
+                                    Text="Lĩnh vực:"
+                                   Margin="10"
+                                   HorizontalAlignment="Left"
+                                    Style="{StaticResource FieldLabel}" />
+                        <ComboBox Grid.Column="3" 
+                                  Grid.Row="1"
+                                   Margin="10"
+                                   materialDesign:HintAssist.Hint="Lĩnh vực"
+                                   Style="{StaticResource ComboBox}"
+                                   ItemsSource="{Binding Path=NewCategory, Converter={vc:EnumToCollectionConverter}, Mode=OneTime}"
+                                   SelectedValuePath="Value"
+                                   DisplayMemberPath="Description"
+                                   Text="{Binding Path=NewCategory}">
+                            <ComboBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </ComboBox.ItemsPanel>
+                        </ComboBox>
+                        <TextBlock Grid.Column="4" Margin="10" Grid.Row="0"
+ Text="Tên thông số:"
+HorizontalAlignment="Center"
+ Style="{StaticResource FieldLabel}" />
+                        <TextBox Grid.Column="5" Margin="10" Grid.Row="0"
+ materialDesign:HintAssist.Hint="Tên thông số"
+ FontSize="16"
+
+ Style="{StaticResource TextBox}"
+ VerticalAlignment="Center"
+ Text="{Binding NewName}" />
+                        <TextBlock Grid.Column="4" Margin="10" Grid.Row="1"
+  Text="Giá trị:"
+ HorizontalAlignment="Left"
+  Style="{StaticResource FieldLabel}" />
+                        <TextBox Grid.Column="5" Grid.Row="1"
+  materialDesign:HintAssist.Hint="Giá trị"
+  FontSize="16"
+
+  Style="{StaticResource TextBox}"
+  Margin="10"
+  VerticalAlignment="Center"
+  Text="{Binding NewValue}"/>
+                        <TextBlock Grid.Column="4"
+           Grid.Row="2"
+  Text="Đơn vị:"
+  Style="{StaticResource FieldLabel}"
+  Margin="10" />
+                        <TextBox Grid.Column="5"
+         Grid.Row="2"
+  materialDesign:HintAssist.Hint="Đơn vị"
+  FontSize="16"
+
+  Style="{StaticResource TextBox}"
+  Margin="10"
+  VerticalAlignment="Center"
+  Text="{Binding NewUnit}"/>
+
+                        <Button Grid.Row="3"  Grid.ColumnSpan="2"
+ Grid.Column="4"
+
+  HorizontalAlignment="Center"
+ Height="30"
+  Width="80"                              
+  FontSize="14"                             
+materialDesign:ButtonAssist.CornerRadius="5"
+Content="Add">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <prism:InvokeCommandAction Command="{Binding AddSpecification}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+
+
+
+                        <StackPanel Grid.Row="3" Grid.Column="0" Grid.RowSpan="2">
+                            <TextBlock Grid.Row="3" Grid.Column="0" Margin="10"
+                          Text="Hình ảnh:"
+                          Style="{StaticResource FieldLabel}"/>
+                            <Button Grid.Row="3"
+                             Grid.Column="3"
+                              Margin="5 10 10 10"
+                              HorizontalAlignment="Center"
+                             Height="30"
+                              Width="80"                              
+                              FontSize="14"                             
+                            materialDesign:ButtonAssist.CornerRadius="5"
+                            Content="Browse">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <prism:InvokeCommandAction Command="{Binding SelectImageCommand}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Button>
+                        </StackPanel>
+                        <DataGrid IsReadOnly="True" x:Name="Data" Grid.ColumnSpan="3"  Grid.RowSpan="4"
+AutoGenerateColumns="False"  Grid.Row="3"  MaxHeight="150" Grid.Column="1" 
+VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding ImageEquimentTypes}" >
+                            <DataGrid.Columns >
+                                <DataGridTextColumn Header="Name" Binding="{Binding ImageName }" />
+
+                                <DataGridTemplateColumn Header="Image">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{Binding ImagePath}" MaxWidth="200" Height="150"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Grid.Row="1"
+                                                         Grid.Column="3"
+                                                          Margin="10"
+                                                          HorizontalAlignment="Right"
+                                                         Height="30"
+                                                          Width="80"                              
+                                                          FontSize="14"      
+                                                           Command="{Binding DataContext.DeleteImageCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding}"
+                                                        materialDesign:ButtonAssist.CornerRadius="5"
+                                                        Content="Delete">
+
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+
+
+                        </DataGrid>
+
+                        <DataGrid IsReadOnly="True" 
+                            AutoGenerateColumns="False" MaxHeight="200"
+                            VirtualizingPanel.ScrollUnit="Pixel" Grid.Row="0" Margin="0 10 0 0" VerticalAlignment="Top" Grid.Column="6" Grid.ColumnSpan="4" Grid.RowSpan="5" ItemsSource="{Binding NewSpecificationEquimentTypes}">
+                            <DataGrid.Columns >
+                                <DataGridTextColumn Header="Tên" Binding="{Binding name }" />
+                                <DataGridTextColumn Header="Giá trị"  Binding="{Binding value }" />
+                                <DataGridTextColumn Header="Đơn vị"  Binding="{Binding unit }"/>
+
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Grid.Row="1"
+                                                         Grid.Column="3"
+                                                          Margin="10"
+                                                          HorizontalAlignment="Right"
+                                                         Height="30"
+                                                          Width="80"                              
+                                                          FontSize="14"      
+                                                           Command="{Binding DataContext.DeleteSpecification, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding}"
+                                                        materialDesign:ButtonAssist.CornerRadius="5"
+                                                        Content="Delete">
+
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+
+
+                        </DataGrid>
+
+                        
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="0"
+                                  Text="Mô tả:"
+                                   Margin="10" 
+                                  Style="{StaticResource FieldLabel}"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"
+           materialDesign:HintAssist.Hint="Mô tả"
+           FontSize="16"
+           Style="{StaticResource TextBox}"
+           Margin="10" 
+           VerticalAlignment="Center"
+           Text="{Binding NewDescription}"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" 
+       Margin="10,0,0,0" 
+       Text="Tag:"
+       Style="{StaticResource FieldLabel}"/>
+                        <!--<ComboBox Grid.Row="1" Grid.Column="1"
+      Margin="10"
+      materialDesign:HintAssist.Hint="Tag"
+      Style="{StaticResource ComboBox}"
+      ItemsSource="{Binding TagIds, UpdateSourceTrigger=PropertyChanged}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox></CheckBox>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+
+                        </ComboBox>-->
+                        <xcctk:CheckComboBox  Grid.Row="1" 
+                                              Grid.Column="1"
+                                              ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                                              SelectedItemsOverride="{Binding NewTag, Mode=TwoWay}"
+                                              ItemsSource="{Binding TagIds}"
+                                              IsSelectAllActive="True"
+                                              FontSize="18"
+                                              >
+                          
+                        </xcctk:CheckComboBox>
+
+                        <Button Grid.Row="5"
+                                Grid.Column="7"
+                                 Margin="10,10,10,10"
+                                 Width="120"
+                                 Style="{StaticResource ButtonPrimary}"
+                                 materialDesign:ButtonAssist.CornerRadius="10"
+                                 Content="Thêm" >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <prism:InvokeCommandAction Command="{Binding CreateEquipmentTypeCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+
+                    </Grid>
+                </Expander>
+            </materialDesign:Card>
+        </Grid>
+    </materialDesign:DialogHost>
+</UserControl>

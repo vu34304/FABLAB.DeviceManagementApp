@@ -15,11 +15,11 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Domain.Dtos.EquipmentT
         public string equipmentTypeName { get; set; }
         public string description { get; set; }
         public ECategory category { get; set; }
-        public List<string> tags { get; set; }
+        public string tags { get; set; }
         public ObservableCollection<FileDataEquimentType> pictures { get; set; }
         public ObservableCollection<SpecificationEquimentType> specifications { get; set; }
 
-        public CreateEquimentTypeDto( string equipmentTypeId, string equipmentTypeName, string description, ECategory category, List<string> tags, ObservableCollection<FileDataEquimentType> pictures, ObservableCollection<SpecificationEquimentType> specifications) 
+        public CreateEquimentTypeDto( string equipmentTypeId, string equipmentTypeName, string description, ECategory category, string tags, ObservableCollection<FileDataEquimentType> pictures, ObservableCollection<SpecificationEquimentType> specifications) 
         { 
             this.equipmentTypeId = equipmentTypeId;
             this.equipmentTypeName = equipmentTypeName;

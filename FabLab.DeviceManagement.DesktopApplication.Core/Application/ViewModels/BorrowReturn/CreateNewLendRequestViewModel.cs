@@ -8,7 +8,6 @@ using FabLab.DeviceManagement.DesktopApplication.Core.Domain.Exceptions;
 using FabLab.DeviceManagement.DesktopApplication.Core.Domain.Models.Equipments;
 using FabLab.DeviceManagement.DesktopApplication.Core.Domain.Models.Projects;
 using FabLab.DeviceManagement.DesktopApplication.Core.Domain.Services;
-using NPOI.SS.Formula.Functions;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Windows;
@@ -33,7 +32,7 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
         public List<string> ProjectNames { get; set; } = new();
         public string ProjectName { get; set; }
         public List<ProjectDto> projects { get; set; } = new();
-        public IEnumerable<ProjectDto> ProjectsFilter { get; set; } 
+        public IEnumerable<ProjectDto> ProjectsFilter { get; set; }
         public IEnumerable<BorrowDto> Borrows { get; set; }
         public bool Approved { get; set; }
 
@@ -151,7 +150,7 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
                         EquipmentEntries = new(viewModels);
                         BorrowEquipmentName = "";
                         BorrowEquipments.Clear();
-                        if(ProjectsFilter.Where(i=>i.Approved == false).Count() != 0)
+                        if (ProjectsFilter.Where(i => i.Approved == false).Count() != 0)
                         {
                             MessageBox.Show("Dự án chưa được duyệt!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                             Approved = false;
@@ -232,7 +231,7 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
 
         private async void Test()
         {
-          Borrows =  (await _apiService.GetBorrowsAsync("Test_Mươn")).ToList();
+            Borrows = (await _apiService.GetBorrowsAsync("Test_Mươn")).ToList();
         }
 
 

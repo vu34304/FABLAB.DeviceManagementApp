@@ -1,33 +1,25 @@
 ﻿using AutoMapper;
 using CommunityToolkit.Mvvm.Input;
+using FabLab.DeviceManagement.DesktopApplication.Core.Application.Commands;
 using FabLab.DeviceManagement.DesktopApplication.Core.Application.Store;
 using FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels.SeedWork;
-using FabLab.DeviceManagement.DesktopApplication.Core.Domain.Dtos.Equipments;
 using FabLab.DeviceManagement.DesktopApplication.Core.Domain.Dtos.EquipmentTypes;
+using FabLab.DeviceManagement.DesktopApplication.Core.Domain.Dtos.Tags;
 using FabLab.DeviceManagement.DesktopApplication.Core.Domain.Exceptions;
 using FabLab.DeviceManagement.DesktopApplication.Core.Domain.Models.Equipments;
 using FabLab.DeviceManagement.DesktopApplication.Core.Domain.Models.EquipmentTypes;
 using FabLab.DeviceManagement.DesktopApplication.Core.Domain.Services;
-using Newtonsoft.Json;
-using NPOI.SS.Formula.Functions;
-using NPOI.SS.UserModel;
-using System;
-using System.Collections.Generic;
+using SixLabors.Fonts.Tables.AdvancedTypographic;
 using System.Collections.ObjectModel;
-using System.IO.Compression;
+using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using MessageBox = System.Windows.MessageBox;
 using System.Windows.Media.Imaging;
-using NPOI.POIFS.FileSystem;
-using FabLab.DeviceManagement.DesktopApplication.Core.Domain.Dtos.Tags;
-using static System.Net.Mime.MediaTypeNames;
+using System.Windows.Media.TextFormatting;
+using MessageBox = System.Windows.MessageBox;
+using Tag = FabLab.DeviceManagement.DesktopApplication.Core.Domain.Models.EquipmentTypes.Tag;
 
 namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels.Device
 {
@@ -36,6 +28,7 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
         public ObservableCollection<ImageEquimentType> ImageEquimentTypes { get; set; } = new();
         private readonly IApiService _apiService;
         private readonly IMapper _mapper;
+
         private readonly EquipmentTypeStore _equipmentTypeStore;
         public string EquipmentTypeId { get; set; } = "";
         public string EquipmentTypeName { get; set; } = "";
@@ -63,16 +56,15 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
         }
 
         public List<FileDataBase64EquipmentType> DataPics { get; set; }
-        private List<TagDto> Tags = new();
-        public List<string> TagIds { get; set; } = new();
+        public List<TagDto> Tags = new();
 
         //Create New Equipment
         public string NewEquipmentTypeId { get; set; } = "";
         public string NewEquipmentTypeName { get; set; } = "";
         public ECategory NewCategory { get; set; }
         public string NewDescription { get; set; } = "";
-        public List<string> NewTag { get; set; } = new();
 
+        public List<string> NewTag { get; set; } = new();
 
         private List<EquipmentTypeDto> equipmentTypes = new();
         private List<EquipmentTypeDto> filteredEquipmentTypes = new();
@@ -80,19 +72,83 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
         public ObservableCollection<string> EquipmentTypeIds => _equipmentTypeStore.EquipmentTypeIds;
         public ObservableCollection<string> EquipmentTypeNames => _equipmentTypeStore.EquipmentTypeNames;
         //public ObservableCollection<string> Tags => _tagStore.TagIds;
-     
+
 
         //Thong so
-        public string NewName { get;set; }
+        public string NewName { get; set; }
         public string NewValue { get; set; }
         public string NewUnit { get; set; }
         public ObservableCollection<SpecificationEquimentType> NewSpecificationEquimentTypes { get; set; } = new();
 
         //Picture
         public ObservableCollection<FileDataEquimentType> NewPictures { get; set; } = new();
-        
+
+        //CheckComboBox
+        private string _selectedText;
+        private ObservableCollection<TagExt> _tag;
+        public string SelectedText
+        {
+            get
+            {
+                return this._selectedText;
+            }
+            set
+            {
+                this._selectedText = value;
+                RaisePropertyChanged("SelectedText");
+            }
+        }
+
+        public ObservableCollection<TagExt> TagExts
+        {
+            get
+            {
+                if (this._tag == null)
+                {
+                    _tag = new ObservableCollection<TagExt>();
+                    _tag.CollectionChanged += (sender, e) =>
+                    {
+                        if (e.OldItems != null)
+                        {
+                            foreach (var item in e.OldItems)
+                            {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                                (item as TagExt).PropertyChanged -= ItemPropertyChanged;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                            }
+                        }
+                        if (e.NewItems != null)
+                        {
+                            foreach (var item in e.NewItems)
+                            {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                                (item as TagExt).PropertyChanged += ItemPropertyChanged;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                            }
+                        }
+                    };
+                }
+
+                return _tag;
+            }
+        }
 
 
+        private void ItemPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "IsSelected")
+            {
+                var tagExt = sender as TagExt;
+
+                if (tagExt != null)
+                {
+                    this.SelectedText = string.Join("; ",
+                        TagExts.Where(r => r.IsSelected).Select(r => r.Tag.TagId).ToArray()
+                        );
+
+                }
+            }
+        }
 
         public ICommand LoadEquipmentTypeEntriesCommand { get; set; }
         public ICommand LoadInitialCommand { get; set; }
@@ -105,7 +161,7 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
         public ICommand SelectImageCommand { get; set; }
 
         public EquipmentTypeViewModel(IApiService apiService, IMapper mapper, EquipmentTypeStore equipmentTypeStore)
-        { 
+        {
             _apiService = apiService;
             _mapper = mapper;
             _equipmentTypeStore = equipmentTypeStore;
@@ -120,8 +176,8 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
             DeleteSpecification = new RelayCommand<SpecificationEquimentType>(execute: DeleteSpec);
 #pragma warning restore CS8622 // Nullability of reference types in type of parameter doesn't match the target delegate (possibly because of nullability attributes).
 #pragma warning disable CS8622 // Nullability of reference types in type of parameter doesn't match the target delegate (possibly because of nullability attributes).
-            DeleteImageCommand = new RelayCommand<ImageEquimentType>(execute: DeleteImage);
 #pragma warning restore CS8622 // Nullability of reference types in type of parameter doesn't match the target delegate (possibly because of nullability attributes).
+
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
@@ -132,12 +188,12 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
             OnPropertyChanged(nameof(EquipmentTypeIds));
             OnPropertyChanged(nameof(EquipmentTypeNames));
             UpdateTag();
-           
+
         }
 
         private async void LoadInitial()
-        {   
-
+        {
+            
             Category = ECategory.All;
 
             EquipmentTypeId = "";
@@ -149,7 +205,7 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
             NewSpecificationEquimentTypes = new();
             NewPictures = new();
             ImageEquimentTypes = new();
-      
+
             try
             {
                 equipmentTypes = (await _apiService.GetAllEquipmentTypesAsync()).ToList();
@@ -163,9 +219,9 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
                         entry.SetApiService(_apiService);
                         entry.SetMapper(_mapper);
                         entry.Updated += LoadInitial;
-                        entry.OnException += Error;                     
+                        entry.OnException += Error;
                     }
-                }  
+                }
             }
             catch (HttpRequestException)
             {
@@ -224,7 +280,7 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
                     {
                         filteredEquipmentTypes = equipmentTypes.Where(i => i.EquipmentTypeName.Contains(EquipmentTypeName)).ToList();
                     }
-                    
+
                     var viewModels = _mapper.Map<IEnumerable<EquipmentTypeDto>, IEnumerable<EquipmentTypeEntryViewModel>>(filteredEquipmentTypes);
                     EquipmentTypeEntries = new(viewModels);
                 }
@@ -240,7 +296,7 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
                         filteredEquipmentTypes = equipmentTypes.Where(i => i.EquipmentTypeName.Contains(EquipmentTypeName)).ToList();
                     }
 
-                    var viewModels = _mapper.Map<IEnumerable< EquipmentTypeDto>, IEnumerable<EquipmentTypeEntryViewModel>>(filteredEquipmentTypes);
+                    var viewModels = _mapper.Map<IEnumerable<EquipmentTypeDto>, IEnumerable<EquipmentTypeEntryViewModel>>(filteredEquipmentTypes);
                     EquipmentTypeEntries = new(viewModels);
                 }
 
@@ -272,65 +328,66 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
             int index = 0;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-               
-                string []files = openFileDialog.FileNames;
+
+                string[] files = openFileDialog.FileNames;
                 foreach (string file in files)
                 {
-                    
+
                     index++;
                     ImageEquimentTypes.Add(new ImageEquimentType()
-                    {  
+                    {
                         ImagePath = file,
                         ImageName = "Picture " + $"{index}",
-                        
-                    })  ;
+
+                    });
                     NewPictures.Add(new FileDataEquimentType()
                     {
                         fileData = System.IO.File.ReadAllBytes(file)
 
-                    }) ;
+                    });
 
-                    
+
                 }
             }
         }
 
-        
+
         public void AddSpec()
         {
-            NewSpecificationEquimentTypes.Add(new SpecificationEquimentType()
+            if (!String.IsNullOrEmpty(NewName) || !String.IsNullOrEmpty(NewUnit) || !String.IsNullOrEmpty(NewValue))
             {
-                name = NewName,
-                value = NewValue,
-                unit = NewUnit,
-            }
+                NewSpecificationEquimentTypes.Add(new SpecificationEquimentType()
+                {
+                    name = NewName,
+                    value = NewValue,
+                    unit = NewUnit,
+                }
             );
+            }
+            else MessageBox.Show("Vui lòng nhập đủ thông tin!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+
         }
 
         private void DeleteSpec(SpecificationEquimentType obj)
         {
-            NewSpecificationEquimentTypes.Remove(obj);           
+            NewSpecificationEquimentTypes.Remove(obj);
         }
 
-        private void DeleteImage(ImageEquimentType obj)
-        {
-            ImageEquimentTypes.Remove(obj);
-        }
 
-        
+
         private async void CreateEquipmentTypeAsync()
         {
-            
+
             var createDto = new CreateEquimentTypeDto(
                 NewEquipmentTypeId,
                 NewEquipmentTypeName,
                 NewDescription,
                 NewCategory,
-                NewTag,
+                SelectedText,
                 NewPictures,
                 NewSpecificationEquimentTypes);
 
-            
+
             try
             {
                 await _apiService.CreateEquipmentType(createDto);
@@ -354,7 +411,7 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
             NewEquipmentTypeId = "";
             NewEquipmentTypeName = "";
             NewDescription = "";
-            
+
 
         }
 
@@ -363,8 +420,10 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
             try
             {
                 Tags = (await _apiService.GetAllTagAsync()).ToList();
-                TagIds = Tags.Select(i => i.TagId).ToList();
-
+                foreach (var tag in Tags)
+                {
+                    TagExts.Add(new TagExt(new Tag(tag.TagId)));
+                }
             }
             catch (HttpRequestException)
             {
@@ -382,7 +441,7 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
             return bi;
         }
 
-       
+
 
     }
 }

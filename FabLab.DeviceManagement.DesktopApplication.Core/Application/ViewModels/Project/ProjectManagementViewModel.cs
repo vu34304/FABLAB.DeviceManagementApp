@@ -5,10 +5,7 @@ using FabLab.DeviceManagement.DesktopApplication.Core.Domain.Dtos.Projects;
 using FabLab.DeviceManagement.DesktopApplication.Core.Domain.Services;
 using System.Collections.ObjectModel;
 using System.Net.Http;
-using System.Windows;
 using System.Windows.Input;
-using MessageBox = System.Windows.MessageBox;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels.Project
 {

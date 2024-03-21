@@ -44,6 +44,7 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
         public string SupplierName { get; set; }
         public EStatus Status { get; set; }
 
+        public bool IsMaintenance => (Status == EStatus.Maintenance || Status == EStatus.NonFunctional) ? false : true;
         public ObservableCollection<SpecificationEquimentType> Specifications { get; set; } = new();
         public ObservableCollection<ImageBitmap> Pictures { get; set; } = new();
         public List<FileDataBase64EquipmentType> DataPics { get; set; }
@@ -90,6 +91,8 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
         public event Action? OnException;
         public ICommand SaveCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
+        public ICommand UpdateStatusCommand { get; set; }
+
         public ICommand GetSpecificationEquipmentTypesAsyncCommand { get; set; }
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -97,6 +100,7 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             //SaveCommand = new RelayCommand(SaveAsync);
+            UpdateStatusCommand = new RelayCommand(UpdateStatus);
             DeleteCommand = new RelayCommand(DeleteAsync);
             GetSpecificationEquipmentTypesAsyncCommand = new RelayCommand(GetSpecificationEquipmentTypesAsync);
 
@@ -130,7 +134,26 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
             _equipmentTypeStore = equipmentTypeStore;
             OnPropertyChanged();
         }
+        private async void UpdateStatus()
+        {
+            FixEquipmentDto fixDto = new FixEquipmentDto(EquipmentId, EquipmentName, YearOfSupply, CodeOfManager, EStatus.Maintenance, LocationId,SupplierName,equipmentTypeId);
 
+            if (_mapper is not null && _apiService is not null)
+            {
+                try
+                {
+                    await _apiService.FixEquipmentAsync(fixDto);
+                    Updated?.Invoke();
+                    MessageBox.Show("Đã Cập Nhật", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                }
+                catch (HttpRequestException)
+                {
+                    OnException?.Invoke();
+                    ShowErrorMessage("Đã có lỗi xảy ra: Mất kết nối với server.");
+                }
+            }
+        }
         //private async void SaveAsync()
         //{
 
@@ -142,7 +165,7 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
         //            await _apiService.FixEquipmentAsync(fixDto);
         //            Updated?.Invoke();
         //            MessageBox.Show("Đã Cập Nhật", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                    
+
         //        }
         //        catch (HttpRequestException)
         //        {
@@ -150,7 +173,7 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
         //            ShowErrorMessage("Đã có lỗi xảy ra: Mất kết nối với server.");
         //        }
         //    }
-            
+
         //}
 
         private async void DeleteAsync()

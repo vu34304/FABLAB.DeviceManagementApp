@@ -48,9 +48,9 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.Services
 
         public async Task<IEnumerable<EquipmentDto>> GetEquipmentsRecordsAsync(string equipmentId, string equipmentName, string yearOfSupply, string equipmentTypeName, ECategory? category, EStatus? status)
         {
-            HttpResponseMessage response = await _httpClient.GetAsync($"{serverUrl}/api/Equipment/Search1?equipmentId={equipmentId}&equipmentName={equipmentName}&YearOfSupply={yearOfSupply}&equipmentTypeName={equipmentTypeName}&Category={category}&equipmentStatus={status}&pageSize=1000&pageNumber=1");
+            HttpResponseMessage response = await _httpClient.GetAsync($"{serverUrl}/api/Equipment/Search1?&equipmentName={equipmentName}&YearOfSupply={yearOfSupply}&equipmentTypeName={equipmentTypeName}&Category={category}&equipmentStatus={status}&pageSize=1000&pageNumber=1");
 
-            response.EnsureSuccessStatusCode();
+            response.EnsureSuccessStatusCode(); //equipmentId={equipmentId//
             string responseBody = await response.Content.ReadAsStringAsync();
 
             var equipments = JsonConvert.DeserializeObject<IEnumerable<EquipmentDto>>(responseBody);

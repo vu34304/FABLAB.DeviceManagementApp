@@ -17,7 +17,7 @@
             Padding="5">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <prism:InvokeCommandAction Command="{Binding LoadCreateProjectViewModelCommand}" />
+            <prism:InvokeCommandAction Command="{Binding LoadEquipmentMaintenanceViewCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <materialDesign:DialogHost CloseOnClickAway="True" IsOpen="{Binding IsErrorMessageShowed}">
@@ -153,10 +153,10 @@ Grid.Row="1"
                        materialDesign:HintAssist.Hint="Tình trạng"
                        Style="{StaticResource ComboBox}"
                        Margin="10"
-                       ItemsSource="{Binding Path=NewStatus, Converter={vc:EnumToCollectionConverter}, Mode=OneTime}"
+                       ItemsSource="{Binding Path= Status, Converter={vc:EnumToCollectionConverter}, Mode=OneTime}"
                        SelectedValuePath="Value"
                        DisplayMemberPath="Description"
-                       Text="{Binding Path=NewStatus}"/>
+                       Text="{Binding Path=Status}"/>
 
                     <Button Grid.ColumnSpan="6"
                      Grid.Row="4"
@@ -190,13 +190,9 @@ Grid.Row="1"
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Mã thiết bị" Width="*" Binding="{Binding EquipmentId}"/>
                         <DataGridTextColumn Header="Tên thiết bị" Width="*" Binding="{Binding EquipmentName}"/>
-                        <DataGridTextColumn Header="Mã loại" Width="*" Binding="{Binding EquipmentTypeId}"/>
-                        <DataGridTextColumn Header="Tên loại" Width="*" Binding="{Binding EquipmentTypeName}"/>
                         <DataGridTextColumn Header="Ngày cấp" Width="*" Binding="{Binding YearOfSupply, StringFormat=dd/MM/yyyy}"/>
                         <DataGridTextColumn Header="Mã quản lí" Width="*" Binding="{Binding CodeOfManager}"/>
-                        <DataGridTextColumn Header="Vị trí" Width="*" Binding="{Binding LocationId}"/>
-                        <DataGridTextColumn Header="NCC" Width="*" Binding="{Binding SupplierName}"/>
-                        <DataGridTextColumn Header="Tình trạng" Width="auto" Binding="{Binding Status}"/>
+                        <DataGridTextColumn Header="Tình trạng" Width="*" Binding="{Binding Status}"/>
 
 
                         <!--<DataGridTemplateColumn Width="auto">
@@ -217,13 +213,25 @@ Grid.Row="1"
                         <DataGridTemplateColumn Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button  Content="More Detail"
-                                                materialDesign:ButtonAssist.CornerRadius="10">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="Click">
-                                                <prism:InvokeCommandAction Command="{Binding GetSpecificationEquipmentTypesAsyncCommand}"/>
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
+                                    <!--<Button Content="Duyệt" IsEnabled="False"
+materialDesign:ButtonAssist.CornerRadius="10">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <prism:InvokeCommandAction Command="{Binding ApprovedCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>-->
+                                    <Button Grid.Column="2" 
+                Margin="10" 
+                    Command="{Binding UpdateStatusCommand}"
+                    IsEnabled="{Binding IsMaintenance}"
+                materialDesign:ButtonAssist.CornerRadius="10"
+                Content="Maintenance">
+                                        <!--<i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <prism:InvokeCommandAction Command="{Binding}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>-->
 
                                     </Button>
                                 </DataTemplate>

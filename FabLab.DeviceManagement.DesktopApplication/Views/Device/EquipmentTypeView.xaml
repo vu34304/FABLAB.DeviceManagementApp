@@ -12,6 +12,7 @@
              xmlns:device="clr-namespace:FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels.Device;assembly=FabLab.DeviceManagement.DesktopApplication.Core" 
              d:DataContext="{d:DesignInstance Type =device:EquipmentTypeViewModel}"
              mc:Ignorable="d" 
+             xmlns:vm="clr-namespace:FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels.Device;assembly=FabLab.DeviceManagement.DesktopApplication.Core"
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              xmlns:xcctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              d:DesignHeight="770" d:DesignWidth="1190"
@@ -592,26 +593,30 @@ VirtualizingPanel.ScrollUnit="Pixel" ItemsSource="{Binding ImageEquimentTypes}" 
        Style="{StaticResource FieldLabel}"/>
                         <!--<ComboBox Grid.Row="1" Grid.Column="1"
       Margin="10"
-      materialDesign:HintAssist.Hint="Tag"
-      Style="{StaticResource ComboBox}"
-      ItemsSource="{Binding TagIds, UpdateSourceTrigger=PropertyChanged}">
+      materialDesign:HintAssist.Hint="Tag" 
+      Style="{StaticResource ComboBox}" 
+      ItemsSource="{Binding tagEntries, UpdateSourceTrigger=PropertyChanged}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <CheckBox></CheckBox>
+                                    <TextBlock Text="{Binding TagId}"></TextBlock>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
-
                         </ComboBox>-->
-                        <xcctk:CheckComboBox  Grid.Row="1" 
-                                              Grid.Column="1"
-                                              ScrollViewer.HorizontalScrollBarVisibility="Visible"
-                                              SelectedItemsOverride="{Binding NewTag, Mode=TwoWay}"
-                                              ItemsSource="{Binding TagIds}"
-                                              IsSelectAllActive="True"
-                                              FontSize="18"
-                                              >
-                          
-                        </xcctk:CheckComboBox>
+                        <ComboBox Grid.Row="1" Grid.Column="1" materialDesign:HintAssist.Hint="Tag" 
+    Text="{Binding Path=SelectedText}" Margin="10" Style="{StaticResource ComboBox}" 
+    IsEditable="True" Foreground="Black"
+    ItemsSource="{Binding Path=TagExts}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type vm:TagExt}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox IsChecked="{Binding IsSelected}" ></CheckBox>
+                                        <TextBlock Style="{StaticResource FieldLabel}" FontWeight="Normal" Text="{Binding Tag.TagId}"></TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+
 
                         <Button Grid.Row="5"
                                 Grid.Column="7"

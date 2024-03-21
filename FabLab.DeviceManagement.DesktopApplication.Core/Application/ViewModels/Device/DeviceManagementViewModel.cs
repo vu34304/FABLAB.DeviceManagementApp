@@ -30,10 +30,7 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
     {
         private readonly IApiService _apiService;
         private readonly IMapper _mapper;
-        private readonly EquipmentStore _equipmentStore;
-        private readonly EquipmentTypeStore _equipmentTypeStore;
-        private readonly SupplierStore _supplierStore;
-        private readonly LocationStore _locationStore;
+
         public DateTime StartDate { get; set; } = DateTime.Now.AddDays(-7).Date;
         public DateTime EndDate { get; set; } = DateTime.Now.Date;
         public string YearSelected { get; set; } = "";
@@ -86,8 +83,6 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
 
         private List<EquipmentDto> equipments = new();
         private List<EquipmentDto> filteredEquipments = new();
-        private List<EquipmentDto> filteredEquipments1 = new();
-
         private List<SupplierDto> suppliers = new();
         private List<LocationDto> locations = new();
         private List<EquipmentTypeDto> equimentTypes = new();
@@ -117,14 +112,10 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
         public ICommand DeleteEquipmentCommand { get; set; }
         public ICommand FixEquipmentCommand { get; set; }
 
-        public DeviceManagementViewModel(IApiService apiService, IMapper mapper, EquipmentStore equipmentStore, EquipmentTypeStore equipmentTypeStore, SupplierStore supplierStore, LocationStore locationStore)
+        public DeviceManagementViewModel(IApiService apiService, IMapper mapper)
         {
             _apiService = apiService;
             _mapper = mapper;
-            _equipmentStore = equipmentStore;
-            _equipmentTypeStore = equipmentTypeStore;
-            _supplierStore = supplierStore;
-            _locationStore = locationStore;
             Years = new ObservableCollection<string>();
             for (int i = DateTime.Now.Year; i >= 1975; i--)
             {
@@ -180,7 +171,6 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
                 {
                     entry.SetApiService(_apiService);
                     entry.SetMapper(_mapper);
-                    entry.SetStore(_supplierStore, _locationStore, _equipmentTypeStore);
                     entry.Updated += LoadInitial;
                     entry.OnException += Error;
                 }
@@ -214,7 +204,6 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
                 {
                     entry.SetApiService(_apiService);
                     entry.SetMapper(_mapper);
-                    entry.SetStore(_supplierStore, _locationStore, _equipmentTypeStore);
                     entry.Updated += LoadInitial;
                     entry.OnException += Error;
                 }
@@ -242,7 +231,6 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
                 {
                     entry.SetApiService(_apiService);
                     entry.SetMapper(_mapper);
-                    entry.SetStore(_supplierStore, _locationStore, _equipmentTypeStore);
                     entry.Updated += LoadInitial;
                     entry.OnException += Error;
                 }
@@ -325,7 +313,6 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
                 ShowErrorMessage("Đã có lỗi xảy ra: Mất kết nối với server.");
             }
         }
-
         private async void UpdateEquimentTypeId()
         {
             try
@@ -339,7 +326,6 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
                 ShowErrorMessage("Đã có lỗi xảy ra: Mất kết nối với server.");
             }
         }
-
         private async void UpdateEquimentTypeName()
         {
             try

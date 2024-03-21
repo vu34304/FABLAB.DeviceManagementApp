@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels.SeedWork
 {
-    public class BaseViewModel : IViewModel
+    public class BaseViewModel : IViewModel, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         protected object _propertyValueCheckLock = new object();
@@ -46,6 +41,11 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
         {
             ErrorMessage = message;
             IsErrorMessageShowed = true;
+        }
+
+        protected void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

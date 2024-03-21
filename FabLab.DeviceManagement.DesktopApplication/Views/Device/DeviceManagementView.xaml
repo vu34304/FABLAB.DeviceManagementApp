@@ -221,10 +221,10 @@ Grid.Row="1"
                        materialDesign:HintAssist.Hint="Tình trạng"
                        Style="{StaticResource ComboBox}"
                        Margin="10"
-                       ItemsSource="{Binding Path=NewStatus, Converter={vc:EnumToCollectionConverter}, Mode=OneTime}"
+                       ItemsSource="{Binding Path=Status, Converter={vc:EnumToCollectionConverter}, Mode=OneTime}"
                        SelectedValuePath="Value"
                        DisplayMemberPath="Description"
-                       Text="{Binding Path=NewStatus}"/>
+                       Text="{Binding Path=Status}"/>
 
                         <Button Grid.ColumnSpan="6"
                      Grid.Row="4"

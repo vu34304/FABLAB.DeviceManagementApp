@@ -117,10 +117,10 @@ Text="{Binding ProjectName}">
                             </ComboBox.ItemsPanel>
                         </ComboBox>-->
                         <TextBox  Grid.Row="2"
-materialDesign:HintAssist.Hint="Ngày trả hiện tại" IsReadOnly="True"
+materialDesign:HintAssist.Hint="Ngày trả hiện tại" 
 FontSize="16" Grid.Column="1" Grid.ColumnSpan="2"
 Style="{StaticResource TextBox}"
-Margin="10"
+Margin="10" IsReadOnly="False"
 VerticalAlignment="Center"
 Text="{Binding RealReturnDate,StringFormat=dd/MM/yyyy}"/>
                     </Grid>

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels.BorrowReturn;
 using FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels.Device;
+using FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels.Maintenance;
 using FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels.Project;
 using FabLab.DeviceManagement.DesktopApplication.Core.Domain.Dtos.Borrowings;
 using FabLab.DeviceManagement.DesktopApplication.Core.Domain.Dtos.Equipments;

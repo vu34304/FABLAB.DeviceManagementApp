@@ -3,22 +3,14 @@ using CommunityToolkit.Mvvm.Input;
 using FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels.SeedWork;
 using FabLab.DeviceManagement.DesktopApplication.Core.Domain.Dtos.Borrowings;
 using FabLab.DeviceManagement.DesktopApplication.Core.Domain.Models.Equipments;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using MessageBox = System.Windows.MessageBox;
 
 namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels.BorrowReturn
 {
     public class CreateNewLendRequestEntryViewModel : BaseViewModel
     {
-        private IMapper? _mapper; 
+        private IMapper? _mapper;
         public string Test { get; set; }
 
         public string EquipmentId { get; set; }
@@ -34,7 +26,7 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
         public event Action? Updated;
         public event Action? OnException;
 
-        public CreateNewLendRequestEntryViewModel(string equipmentId, string equipmentName, DateTime yearOfSupply, string codeOfManager, EStatus status, bool isBorrow): this()
+        public CreateNewLendRequestEntryViewModel(string equipmentId, string equipmentName, DateTime yearOfSupply, string codeOfManager, EStatus status, bool isBorrow) : this()
         {
             EquipmentId = equipmentId;
             EquipmentName = equipmentName;
@@ -46,9 +38,9 @@ namespace FabLab.DeviceManagement.DesktopApplication.Core.Application.ViewModels
 
         public ICommand AddEquipmentCommand { get; set; }
 
-        public CreateNewLendRequestEntryViewModel() 
+        public CreateNewLendRequestEntryViewModel()
         {
-            AddEquipmentCommand = new RelayCommand(AddEquipment); 
+            AddEquipmentCommand = new RelayCommand(AddEquipment);
         }
 
         public void SetMapper(IMapper mapper)
